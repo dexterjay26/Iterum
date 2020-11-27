@@ -1,9 +1,9 @@
+import '../screens/pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../screens/mobile_auth_screen.dart';
+import '../screens/otp_screen.dart';
 import '../main.dart';
 
 enum Status {
@@ -25,6 +25,7 @@ class Auth with ChangeNotifier {
   bool loggedIn;
   bool loading = false;
   String token;
+  bool _hasPin;
 
   Status _status = Status.Uninitialized;
 
@@ -44,58 +45,19 @@ class Auth with ChangeNotifier {
   String get id => _id;
   String get number => _number;
   Status get status => _status;
+  bool get hasPin => _hasPin;
 
   Auth.initialize() {
     readPrefs();
   }
 
   Future<void> readPrefs() async {
-    // If there is an account that is currently logged in.
-    await Future.delayed(Duration(seconds: 3)).then((v) async {
-      //firestore = FirebaseFirestore.instance;
-      final prefs = await SharedPreferences.getInstance();
-      try {
-        final userData = await json.decode(prefs.getString('userData'))
-            as Map<String, dynamic>;
-
-        if (userData.containsKey('userData') || userData != null) {
-          print('this is also triggerd');
-          _id = userData['id'];
-          _number = userData['number'];
-
-          user = auth.currentUser;
-
-          loggedIn = true;
-
-          print("There is a currently logged in user");
-
-          //_userModel = await _userServicse.getUserById(_user.uid);
-          _status = Status.Authenticated;
-          notifyListeners();
-          return;
-        }
-      } catch (e) {
-        await prefs.clear().then((value) {
-          if (value) {
-            print("CLEARED");
-          }
-        });
-      }
-
-      _status = Status.Unauthenticated;
-      notifyListeners();
-      return;
-    });
-
     FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
-        print('=================================');
-        print('\n User is currently signed out! \n');
-        print('=================================');
+        _status = Status.Unauthenticated;
+        notifyListeners();
       } else {
-        print('=================================');
-        print('User is signed in!');
-        print('=================================');
+        print("Signed In");
 
         _id = user.uid;
         _number = user.phoneNumber;
@@ -112,46 +74,23 @@ class Auth with ChangeNotifier {
     //final AuthResult user = await _auth.signInWithCredential(phoneAuthCredential);
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-
     final User currentUser = userCredential.user;
 
     assert(userCredential.user.uid == currentUser.uid);
 
-    final prefs = await SharedPreferences.getInstance();
-
-    final availUser = await _getUserById(userCredential.user.uid);
-
-    print("AVAIL USER $availUser");
+    //final availUser =
 
     if (userCredential.user.uid != null) {
       //get the user
-
-      if (!availUser) {
-        await _createUser(
-            id: userCredential.user.uid,
-            number: userCredential.user.phoneNumber);
-      }
+      await _getUserById(
+        context: context,
+        id: userCredential.user.uid,
+        number: userCredential.user.phoneNumber,
+      );
 
       print("there is a user");
 
-      String userData = json.encode({
-        'id': userCredential.user.uid,
-        'number': userCredential.user.phoneNumber,
-        //'token': userCredential.credential.token
-      });
-
-      //userCredential.credential.providerId
-      await prefs.setString('userData', userData);
-
       _status = Status.Authenticated;
-
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => HomeScreen(),
-      //   ),
-      // );
-      loggedIn = true;
       notifyListeners();
     }
   }
@@ -159,6 +98,7 @@ class Auth with ChangeNotifier {
   Future<void> verifyPhoneNumber(BuildContext context, String number) async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
+      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => OTPScreen()));
       _showVerifyDialog(context);
     };
 
@@ -183,6 +123,14 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future<void> setPin(String pin) async {
+    await users.doc(_id).update({'pin': pin}).then((value) {
+      print("User Updated");
+      _hasPin = true;
+      notifyListeners();
+    }).catchError((error) => print("Failed to update user: $error"));
+  }
+
   Future<void> _createUser({String id, String number}) async {
     print('=================================');
     print('CREATE USER METHOD');
@@ -190,6 +138,7 @@ class Auth with ChangeNotifier {
     Map<String, dynamic> values = {
       'id': id,
       'number': number,
+      'pin': '',
     };
 
     await users
@@ -197,31 +146,31 @@ class Auth with ChangeNotifier {
         .set(values)
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
+    _hasPin = false;
   }
 
-  Future<bool> _getUserById(String id) async {
+  Future<void> _getUserById({
+    BuildContext context,
+    String id,
+    String number,
+  }) async {
     print('=================================');
     print('GET USER METHOD');
     print('=================================');
+
     try {
-      await firestore
+      final documentSnapshot = await firestore
           .collection('users')
           .doc(id)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          print('=================================');
-          print('MERONG DATA');
-          print('=================================');
+          .get(); // get the user, if null must create new user
 
-          _id = documentSnapshot.data()['id'];
-          _number = documentSnapshot.data()['number'];
-          return true;
-        } else {
-          print('Document does not exist on the databaseseses');
-          return false;
-        }
-      });
+      if (documentSnapshot.exists) {
+        _id = documentSnapshot.data()['id'];
+        _number = documentSnapshot.data()['number'];
+      } else {
+        await _createUser(id: id, number: number);
+        _hasPin = false; // creates user
+      }
     } catch (e) {
       print("PROBLEM PROBLEM PROBLEM");
       print(e.toString());
@@ -272,26 +221,21 @@ class Auth with ChangeNotifier {
   }
 
   Future signOut(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear().then((res) async {
-      if (res) {
-        //_auth.signOut();
-        await auth.signOut();
-        _status = Status.Uninitialized;
+    await auth.signOut();
+    _status = Status.Uninitialized;
 
-        //notifyListeners();
-        _id = null;
-        _number = null;
+    //notifyListeners();
+    _id = null;
+    _number = null;
+    _hasPin = null;
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (ctx) => FastAid(),
-          ),
-        );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => FastAid(),
+      ),
+    );
 
-        //return Future.delayed(Duration.zero);
-      }
-    });
+    //return Future.delayed(Duration.zero);
   }
 }
