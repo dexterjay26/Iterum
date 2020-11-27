@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import './page/home_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
-import './screens/tutorial_screen.dart';
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
-void main(List<String> args) {
-  runApp(FastAid());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => GoogleSignInProvider(),
+        ),
+      ],
+      child: FastAid(),
+    ),
+  );
 }
 
 class FastAid extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FastAidApp(),
-    );
-  }
-}
+  static final String title = 'Google SignIn';
 
-class FastAidApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: TutorialScreen(),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: title,
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+        home: HomePage(),
+      );
 }
