@@ -7,7 +7,7 @@ import '../widgets/logged_in_widget.dart';
 import '../widgets/sign_up_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/signup_screen.dart';
+//import '../screens/signup_screen.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -20,12 +20,12 @@ class HomePage extends StatelessWidget {
           if (provider.isSigningIn) {
             return buildLoading();
           } else if (snapshot.hasData) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => LoggedInWidget(),
-              ),
-            );
-            //return LoggedInWidget();
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (_) => LoggedInWidget(),
+            //   ),
+            // );
+            return LoggedInWidget();
           } else {
             return SignUpWidget();
             //return SignupScreen();
