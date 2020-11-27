@@ -29,6 +29,8 @@ dependencies:
 
   # UI TOOLS
   carousel_slider: 2.3.0
+  google_sign_in: ^4.5.6
+  
 
 
   
