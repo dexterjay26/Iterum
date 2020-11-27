@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class CarouselWidget extends StatefulWidget {
-  List<Card> _cards = [];
-  CarouselWidget([this._cards]);
+  List<Container> _cards = [];
+  CarouselWidget(this._cards);
 
   @override
   _CarouselWidgetState createState() => _CarouselWidgetState();
