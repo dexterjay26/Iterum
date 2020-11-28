@@ -19,7 +19,9 @@ class FastAidApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TutorialScreen(),
+      body: Center(
+        child: Image(),
+      ),
     );
   }
 }
