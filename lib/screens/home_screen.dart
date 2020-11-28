@@ -1,3 +1,13 @@
+import 'package:FastAid/screens/messaging_widget.dart';
+
+import '../models/messages.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import '../providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
+
+import '../screens/map_screen.dart';
+import '../screens/sos_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -6,20 +16,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _firebaseMessaging = FirebaseMessaging();
+
   final tabs = [
-    Center(
-      child: Text('Tab 1'),
-    ),
-    Center(
-      child: Text('Tab 2'),
-    ),
-    Center(
-      child: Text('Tab 3'),
-    ),
+    SOSScreen(),
+    MapScreen(),
+    MessageBuilder(),
     Center(
       child: Text('Tab 4'),
     ),
   ];
+
+  @override
+  void initState() {
+    _firebaseMessaging.onTokenRefresh.listen(sendTokenToServer);
+    _firebaseMessaging.getToken();
+
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    super.initState();
+  }
+
+  void sendTokenToServer(String token) {
+    print('FCM TOKEN: $token');
+    //final provider = Provider.of<GoogleSignInProvider>(context);
+    //e1wrQMgTTZ6N8uJvE03_He:APA91bFO9SkTEfLH1npBEfUKb2kRrYavExY21nZsElwhmFkQlgRftVyjEH5aZP_wbvYuv-2ueXdMKQpFaT2_MSJ8CZ50YwPYY5HDCAfBL55w8pikkS642gk5jQySUGC0gBOgrG9jodZe
+  }
 
   int currentIndex = 0;
   @override
@@ -35,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
+            icon: Icon(Icons.map),
             backgroundColor: Colors.orange,
-            label: 'Camera',
+            label: 'Map',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.location_city),

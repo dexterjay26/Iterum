@@ -20,11 +20,10 @@ class HomePage extends StatelessWidget {
           if (provider.isSigningIn) {
             return buildLoading();
           } else if (snapshot.hasData) {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (_) => LoggedInWidget(),
-            //   ),
-            // );
+            if (provider.userCredentials == null) {
+              provider.logout();
+              return SignUpWidget();
+            }
             return LoggedInWidget();
           } else {
             return SignUpWidget();
