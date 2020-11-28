@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 CollectionReference users = FirebaseFirestore.instance.collection('users');
+CollectionReference help_request =
+    FirebaseFirestore.instance.collection('help_request');
+
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class UserHelper {
@@ -37,6 +41,76 @@ class UserHelper {
     if (documentSnapshot.exists) {
       return true;
     }
+
+    return false;
+  }
+
+  Future<QuerySnapshot> fetchNeedsHelp() async {
+    final querySnapshot = await firestore
+        .collection('help_request')
+        .where('responded', isEqualTo: false)
+        .get();
+
+    if (querySnapshot != null) {
+      return querySnapshot;
+    }
+    print('NO DATA');
+
+    return null;
+
+    // if (documentSnapshot && documentSnapshot.data()['responded']) {
+    //   return documentSnapshot;
+    // }
+
+    // return null;
+  }
+
+  Future<bool> respondHelp(String id, String respondingID) async { // responds to help na, we can put some thing here too
+    await help_request
+        .doc(id)
+        .update({'responded': true, 'responding': respondingID}).then((value) {
+      print("Response Updated");
+      return true;
+    }).catchError((error) {
+      print("Failed to update user: $error");
+      return false;
+    });
+  }
+
+  Future<bool> hasResponding(String id) async {
+    final documentSnapshot = await firestore.collection('help_request').doc(id).get();
+    final responded = await documentSnapshot.data()['responded'];
+    if(responded){
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> sendHelp(
+      {String id,
+      double lat,
+      double lng,
+      String number,
+      String name,
+      String fcmToken}) async {
+    final documentSnapshot = await firestore.collection('users').doc(id).get();
+
+    Map<String, dynamic> values = {
+      'id': id,
+      'name': name,
+      'number': await documentSnapshot.data()['number'],
+      'lat': lat,
+      'lng': lng,
+      'date-req': DateTime.now().toIso8601String(),
+      'responded': false,
+      'responding': '',
+    };
+
+    await help_request.doc(id).set(values).then((value) {
+      print("Help Requested");
+      return true;
+    }).catchError((error) => print("Failed to request help: $error"));
 
     return false;
   }
