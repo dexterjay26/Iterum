@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:FastAid/screens/signup_next_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -16,28 +15,64 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignupScreen extends StatefulWidget {
+class NextSignupScreen extends StatefulWidget {
+//id: userData.user.uid,
+//name: nameController.text,
+//email: userData.user.email,
+//number: numberController.text,
+//imgUrl: userData.user.photoURL,
+
+  final id;
+  final name;
+  final email;
+  final number;
+  final imgUrl;
+
+  NextSignupScreen({
+    this.id,
+    this.name,
+    this.email,
+    this.number,
+    this.imgUrl,
+  });
+
   //final DateTime birthDate;
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  _NextSignupScreenState createState() => _NextSignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _NextSignupScreenState extends State<NextSignupScreen> {
   DateTime _selectedDate;
-
-  final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final numberController = TextEditingController();
   final addressController = TextEditingController();
+  final birthDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<GoogleSignInProvider>(context);
-    final userData = provider.userCredentials;
+    // final provider = Provider.of<GoogleSignInProvider>(context);
+    // final userData = provider.userCredentials;
     final width = MediaQuery.of(context).size.width;
 
-    nameController.text = userData.user.displayName;
-    numberController.text = userData.user.phoneNumber;
+    emailController.text = widget.email;
+
+    void _presentDatePicker() {
+      showDatePicker(
+        context: context,
+        initialDate: DateTime(2000),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      ).then((pickedDate) {
+        if (pickedDate == null) {
+          return;
+        }
+        setState(() {
+          _selectedDate = pickedDate;
+          birthDateController.text =
+              (DateFormat.yMd().format(pickedDate)).toString();
+          print(_selectedDate);
+        });
+      });
+    }
 
     return Scaffold(
       body: Center(
@@ -49,36 +84,38 @@ class _SignupScreenState extends State<SignupScreen> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Name',
+                  'Email',
                   style: TextStyle(fontSize: 24, color: Colors.orange),
                 ),
               ),
               SizedBox(height: 5),
               TextField(
-                controller: nameController,
+                controller: emailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                 ),
               ),
-              // TextField(
-              //   controller: emailController,
-              //   decoration: InputDecoration(labelText: 'Email'),
-              // ),
               SizedBox(height: 20),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Contact',
+                  'Birth Date',
                   style: TextStyle(fontSize: 24, color: Colors.orange),
                 ),
               ),
+
               SizedBox(height: 5),
-              TextField(
-                controller: numberController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+              GestureDetector(
+                onTap: _presentDatePicker,
+                child: TextField(
+                  controller: birthDateController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  enabled: false,
                 ),
               ),
+              SizedBox(height: 20),
               // RaisedButton(
               //   onPressed: _presentDatePicker,
               //   child: Text(_selectedDate == null
@@ -89,6 +126,20 @@ class _SignupScreenState extends State<SignupScreen> {
               //   controller: addressController,
               //   decoration: InputDecoration(labelText: 'Address'),
               // ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Address',
+                  style: TextStyle(fontSize: 24, color: Colors.orange),
+                ),
+              ),
+              SizedBox(height: 5),
+              TextField(
+                controller: addressController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              ),
               Spacer(),
               Container(
                 height: 60,
@@ -104,12 +155,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (ctx) => NextSignupScreen(
-                          id: userData.user.uid,
-                          name: nameController.text,
-                          email: userData.user.email,
-                          number: numberController.text,
-                          imgUrl: userData.user.photoURL,
+                        builder: (ctx) => TakeSelfie(
+                          id: widget.id,
+                          name: widget.name,
+                          email: widget.email,
+                          number: widget.number,
+                          imgUrl: widget.imgUrl,
+                          birthDate: _selectedDate.toIso8601String(),
+                          address: addressController.text,
                         ),
                       ),
                     );
