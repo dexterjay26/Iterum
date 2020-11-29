@@ -1,9 +1,13 @@
+import 'package:FastAid/page/home_page.dart';
 import 'package:flutter/material.dart';
 
+import './carousel_cards.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class CarouselWidget extends StatefulWidget {
-  List<Container> _cards = [];
+  List<CarouselCard> _cards = [];
   CarouselWidget(this._cards);
 
   @override
@@ -48,7 +52,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
             }).toList(),
           ),
           Positioned(
-            bottom: 25,
+            bottom: 80,
             right: 1,
             left: 1,
             child: Container(
@@ -74,15 +78,25 @@ class _CarouselWidgetState extends State<CarouselWidget> {
             //   ),
             // ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(bottom: 10),
-            child: FlatButton(
-              onPressed: () {},
-              child: Text(
-                "Skip",
-                style: TextStyle(
-                  color: Colors.white,
+          Positioned(
+            bottom: 50,
+            right: 1,
+            left: 1,
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(bottom: 10),
+              child: FlatButton(
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('isShowed', true);
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (ctx) => HomePage()));
+                },
+                child: Text(
+                  _currentPage == 3 ? "Finish" : "Sklp",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
             ),
@@ -99,7 +113,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       height: isActive ? 12 : 8,
       width: isActive ? 12 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Theme.of(context).primaryColor : Colors.white,
+        color:
+            isActive ? Theme.of(context).primaryColor : Colors.orange.shade500,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );

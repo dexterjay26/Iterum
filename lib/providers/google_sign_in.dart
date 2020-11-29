@@ -203,6 +203,11 @@ class GoogleSignInProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<DocumentSnapshot> getUserSnapShot() async {
+    final documentSnapshot = await firestore.collection('help_request').doc(userCredentials.user.uid).get();
+    return documentSnapshot;
+  }
+
   Future<void> createUser({
     String id,
     String name,

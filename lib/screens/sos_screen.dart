@@ -26,11 +26,13 @@ class _SOSScreenState extends State<SOSScreen> {
               child: CircularProgressIndicator(),
             )
           : Container(
-              child: RaisedButton(
-                onPressed: () async {
-                  setState(() {
-                    loading = true;
-                  });
+              child: InkWell(
+                onTap: () async {
+                  setState(
+                    () {
+                      loading = true;
+                    },
+                  );
                   final locData = await Location().getLocation();
                   print(locData.latitude);
                   print(locData.longitude);
@@ -41,14 +43,21 @@ class _SOSScreenState extends State<SOSScreen> {
                     lat: locData.latitude,
                     lng: locData.longitude,
                   )
-                      .then((value) {
-                    print('HELP WAS SENT');
-                    setState(() {
-                      loading = false;
-                    });
-                  });
+                      .then(
+                    (value) {
+                      print('HELP WAS SENT');
+                      setState(
+                        () {
+                          loading = false;
+                        },
+                      );
+                    },
+                  );
                 },
-                child: Text('Send Help'),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Image.asset('assets/images/sos_1.png'),
+                ),
               ),
             ),
     );

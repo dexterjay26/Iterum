@@ -3,8 +3,12 @@ import 'package:FastAid/screens/messaging_widget.dart';
 import '../models/messages.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import './user_info_screen.dart';
+
 import '../providers/google_sign_in.dart';
 import 'package:provider/provider.dart';
+
+import '../screens/learn_home_screen.dart';
 
 import '../screens/map_screen.dart';
 import '../screens/sos_screen.dart';
@@ -21,10 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final tabs = [
     SOSScreen(),
     MapScreen(),
-    MessageBuilder(),
-    Center(
-      child: Text('Tab 4'),
-    ),
+    LearnHomeScreen(),
+    UserInfoScreen(),
   ];
 
   @override
@@ -72,9 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_city),
+            icon: Icon(Icons.library_books),
             backgroundColor: Colors.orange,
-            label: 'Location',
+            label: 'Learn',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
