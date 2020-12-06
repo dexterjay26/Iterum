@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:location/location.dart';
-import '../helpers/user_helper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../api/messaging.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../helpers/user_helper.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
@@ -41,68 +40,16 @@ class GoogleSignInProvider extends ChangeNotifier {
     reference.snapshots().listen(
       (querySnapshot) {
         querySnapshot.docChanges.forEach((change) async {
-          // Do something with change
-          print('================================');
-          print('================================');
-          print('Somethinmg CHANGED');
-          print('================================');
-          print('================================');
-          print(change.doc.id);
-          print(change.doc.data()['id']);
-
-          // if (change.doc.id == userCredentials.user.uid) {
-          //   print('NAPASOK DITO');
-          //   final isResponding = await userHelper.hasResponding(change.doc.id);
-
-          //   if (isResponding) {
-          //     _hasResponding = true;
-          //     notifyListeners();
-          //     return;
-          //   }
-
-          //   _hasResponding = false;
-          //   notifyListeners();
-          //   return;
-          // } else {
           await fetchNeedsHelp();
           notifyListeners();
         });
       },
     );
-
-    // userReference.snapshots().listen(
-    //   (querySnapshot) {
-    //     querySnapshot.docChanges.forEach((change) async {
-    //       //await fetchNeedsHelp();
-    //       notifyListeners();
-    //     });
-    //   },
-    // );
   }
 
   Future fetchNeedsHelp() async {
     final querySnapshot = await userHelper.fetchNeedsHelp();
-
     markerSnapshot = querySnapshot;
-
-    // querySnapshot.docs.forEach(
-    //   (value) {
-    //     _markers.add(
-    //       Marker(
-    //         markerId: MarkerId(
-    //           value.data()['id'],
-    //         ),
-    //         position: LatLng(
-    //           value.data()['lat'],
-    //           value.data()['lng'],
-    //         ),
-    //         onTap: () {
-    //           print("${value.data()['id']} IM PRESSED");
-    //         },
-    //       ),
-    //     );
-    //},
-    //);
   }
 
   bool get isSigningIn => _isSigningIn;
@@ -135,11 +82,9 @@ class GoogleSignInProvider extends ChangeNotifier {
       final hasAccount = await userHelper.getUserById(userCredentials.user.uid);
 
       if (hasAccount) {
-        //Do something - go login
         _hasAccount = true;
       } else {
         _hasAccount = false;
-        //Do something - go sign up
       }
       _userCredential = userCredentials;
       isSigningIn = false;
@@ -204,7 +149,10 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   Future<DocumentSnapshot> getUserSnapShot() async {
-    final documentSnapshot = await firestore.collection('help_request').doc(userCredentials.user.uid).get();
+    final documentSnapshot = await firestore
+        .collection('help_request')
+        .doc(userCredentials.user.uid)
+        .get();
     return documentSnapshot;
   }
 

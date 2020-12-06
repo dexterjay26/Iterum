@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 CollectionReference users = FirebaseFirestore.instance.collection('users');
 CollectionReference help_request =
@@ -57,12 +55,6 @@ class UserHelper {
     print('NO DATA');
 
     return null;
-
-    // if (documentSnapshot && documentSnapshot.data()['responded']) {
-    //   return documentSnapshot;
-    // }
-
-    // return null;
   }
 
   Future<bool> respondHelp(String id, String respondingID) async { // responds to help na, we can put some thing here too
