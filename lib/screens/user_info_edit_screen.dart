@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserInfoEdit extends StatelessWidget {
-  DocumentSnapshot userSnapshot;
+  final DocumentSnapshot userSnapshot;
 
   UserInfoEdit(this.userSnapshot);
 

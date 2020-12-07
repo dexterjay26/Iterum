@@ -43,7 +43,6 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () async {
       final prefs = await SharedPreferences.getInstance();

@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/google_sign_in.dart';
-import './user_info_edit_screen.dart';
 
 class UserInfoScreen extends StatelessWidget {
   @override
@@ -55,7 +53,7 @@ class UserInfoScreen extends StatelessWidget {
             height: 90,
           ),
           Text(
-            "Juan Dela Cruz",
+            userCredentials.user.displayName,
             style: TextStyle(fontSize: 24),
           ),
           SizedBox(height: 10),

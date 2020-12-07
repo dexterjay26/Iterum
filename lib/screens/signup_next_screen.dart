@@ -1,27 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../providers/google_sign_in.dart';
 import './take_selfie_screen.dart';
 
-import 'package:FastAid/page/home_page.dart';
-import 'package:flutter/material.dart';
-
-import 'package:carousel_slider/carousel_slider.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 class NextSignupScreen extends StatefulWidget {
-//id: userData.user.uid,
-//name: nameController.text,
-//email: userData.user.email,
-//number: numberController.text,
-//imgUrl: userData.user.photoURL,
-
   final id;
   final name;
   final email;

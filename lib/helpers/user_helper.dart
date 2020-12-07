@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 CollectionReference users = FirebaseFirestore.instance.collection('users');
-CollectionReference help_request =
+CollectionReference helpRequest =
     FirebaseFirestore.instance.collection('help_request');
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -58,15 +58,18 @@ class UserHelper {
   }
 
   Future<bool> respondHelp(String id, String respondingID) async { // responds to help na, we can put some thing here too
-    await help_request
+    var help = false;
+    await helpRequest
         .doc(id)
         .update({'responded': true, 'responding': respondingID}).then((value) {
       print("Response Updated");
-      return true;
+      help = true;
     }).catchError((error) {
       print("Failed to update user: $error");
-      return false;
+      help = false;
     });
+
+    return help;
   }
 
   Future<bool> hasResponding(String id) async {
@@ -99,7 +102,7 @@ class UserHelper {
       'responding': '',
     };
 
-    await help_request.doc(id).set(values).then((value) {
+    await helpRequest.doc(id).set(values).then((value) {
       print("Help Requested");
       return true;
     }).catchError((error) => print("Failed to request help: $error"));

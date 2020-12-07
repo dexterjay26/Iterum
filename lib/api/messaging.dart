@@ -11,13 +11,14 @@ class Messaging {
     @required String title,
     @required String body,
   }) {
-    sendToTopic(title: title, body: body, topic: 'all');
+    return sendToTopic(title: title, body: body, topic: 'all');
   }
 
-  static Future<http.Response> sendToTopic(
-          {@required String title,
-          @required String body,
-          @required String topic}) =>
+  static Future<http.Response> sendToTopic({
+    @required String title,
+    @required String body,
+    @required String topic,
+  }) =>
       sendTo(title: title, body: body, fcmToken: '/topics/$topic');
 
   static Future<http.Response> sendTo({

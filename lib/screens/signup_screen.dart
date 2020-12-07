@@ -1,20 +1,8 @@
-import 'dart:ui';
-
-import 'package:FastAid/screens/signup_next_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
+import '../screens/signup_next_screen.dart';
 import '../providers/google_sign_in.dart';
-import './take_selfie_screen.dart';
-
-import 'package:FastAid/page/home_page.dart';
-import 'package:flutter/material.dart';
-
-import 'package:carousel_slider/carousel_slider.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   //final DateTime birthDate;
@@ -23,7 +11,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  DateTime _selectedDate;
+  //DateTime _selectedDate;
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();

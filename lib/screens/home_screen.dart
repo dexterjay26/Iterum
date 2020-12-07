@@ -1,18 +1,10 @@
-import 'package:FastAid/screens/messaging_widget.dart';
-
-import '../models/messages.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 import './user_info_screen.dart';
-
-import '../providers/google_sign_in.dart';
-import 'package:provider/provider.dart';
-
 import '../screens/learn_home_screen.dart';
-
 import '../screens/map_screen.dart';
 import '../screens/sos_screen.dart';
-import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

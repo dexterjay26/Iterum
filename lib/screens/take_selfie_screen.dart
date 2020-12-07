@@ -1,9 +1,7 @@
-import 'dart:ui';
-
-import 'package:FastAid/page/home_page.dart';
-import 'package:FastAid/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../screens/home_screen.dart';
 import '../providers/google_sign_in.dart';
 
 class TakeSelfie extends StatefulWidget {
@@ -13,7 +11,7 @@ class TakeSelfie extends StatefulWidget {
   final number;
   final birthDate;
   final address;
-  String imgUrl;
+  final String imgUrl;
 
   TakeSelfie({
     this.id,

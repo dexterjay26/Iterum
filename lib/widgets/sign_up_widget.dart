@@ -1,12 +1,9 @@
 import './google_signup_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignUpWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => buildSignUp();
-
-  //GoogleSignupButtonWidget(),
 
   Widget buildSignUp() => Column(
         children: [
@@ -22,12 +19,6 @@ class SignUpWidget extends StatelessWidget {
             ),
           ),
           Spacer(),
-          // SignInButton(
-          //   Buttons.Google,
-          //   onPressed: () {
-          //     //_showButtonPressDialog(context, 'Google');
-          //   },
-          // ),
           GoogleSignupButtonWidget(),
           SizedBox(
             height: 12,

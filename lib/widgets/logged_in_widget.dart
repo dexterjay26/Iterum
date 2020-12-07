@@ -1,12 +1,9 @@
-import '../screens/home_screen.dart';
-import '../screens/signup_screen.dart';
-
-import '../providers/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/home_screen.dart';
 import '../screens/signup_screen.dart';
+import '../providers/google_sign_in.dart';
 
 class LoggedInWidget extends StatelessWidget {
   @override
