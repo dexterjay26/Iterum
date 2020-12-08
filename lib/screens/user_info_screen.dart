@@ -35,15 +35,10 @@ class UserInfoScreen extends StatelessWidget {
               ),
               Positioned(
                 top: 110,
-                child: ClipOval(
-                  //borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                  child: Container(
-                    child: Image.network(
-                      userCredentials.user.photoURL,
-                      fit: BoxFit.cover,
-                    ),
-                    width: 140,
-                    height: 140,
+                child: CircleAvatar(
+                  radius: 70,
+                  backgroundImage: NetworkImage(
+                    userCredentials.user.photoURL,
                   ),
                 ),
               ),

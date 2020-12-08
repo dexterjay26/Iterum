@@ -6,6 +6,10 @@
 
 [Presentation](https://www.figma.com/file/9nikxmztXqXSNeyPiGM5eL/Iterum-FastAid?node-id=4%3A7468)
 
+## Currently Working
+   * Sign up - Uploading own image
+   * Code refractoring
+
 ## Future Updates
 
 1. SMS authentication
