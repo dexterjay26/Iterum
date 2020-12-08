@@ -1,3 +1,4 @@
+import 'package:FastAid/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -31,8 +32,6 @@ class _NextSignupScreenState extends State<NextSignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<GoogleSignInProvider>(context);
-    // final userData = provider.userCredentials;
     final width = MediaQuery.of(context).size.width;
 
     emailController.text = widget.email;
@@ -54,6 +53,22 @@ class _NextSignupScreenState extends State<NextSignupScreen> {
           print(_selectedDate);
         });
       });
+    }
+
+    void _next() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => TakeSelfie(
+            id: widget.id,
+            name: widget.name,
+            email: widget.email,
+            number: widget.number,
+            imgUrl: widget.imgUrl,
+            birthDate: _selectedDate.toIso8601String(),
+            address: addressController.text,
+          ),
+        ),
+      );
     }
 
     return Scaffold(
@@ -98,16 +113,6 @@ class _NextSignupScreenState extends State<NextSignupScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              // RaisedButton(
-              //   onPressed: _presentDatePicker,
-              //   child: Text(_selectedDate == null
-              //       ? 'Selected Date'
-              //       : (DateFormat.yMd().format(_selectedDate)).toString()),
-              // ),
-              // TextField(
-              //   controller: addressController,
-              //   decoration: InputDecoration(labelText: 'Address'),
-              // ),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -123,52 +128,11 @@ class _NextSignupScreenState extends State<NextSignupScreen> {
                 ),
               ),
               Spacer(),
-              Container(
-                height: 60,
-                width: 220,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(
-                      color: Colors.orange,
-                    ),
-                  ),
-                  color: Colors.orange,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => TakeSelfie(
-                          id: widget.id,
-                          name: widget.name,
-                          email: widget.email,
-                          number: widget.number,
-                          imgUrl: widget.imgUrl,
-                          birthDate: _selectedDate.toIso8601String(),
-                          address: addressController.text,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              CustomButton(
+                function: _next,
+                text: "Next",
               ),
               Spacer(),
-              // RaisedButton(
-              //   onPressed: () {
-              //     Provider.of<GoogleSignInProvider>(context, listen: false)
-              //         .skipSetup(
-              //       id: userData.user.uid,
-              //       email: userData.user.email,
-              //       name: userData.user.displayName,
-              //       number: userData.user.phoneNumber,
-              //       photoUrl: userData.user.photoURL,
-              //     );
-              //   },
-              //   child: Text('Skip'),
-              // ),
             ],
           ),
         ),

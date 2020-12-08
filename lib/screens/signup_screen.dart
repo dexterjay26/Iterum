@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../screens/signup_next_screen.dart';
 import '../providers/google_sign_in.dart';
+import '../widgets/custom_button.dart';
 
 class SignupScreen extends StatefulWidget {
   //final DateTime birthDate;
@@ -27,6 +28,20 @@ class _SignupScreenState extends State<SignupScreen> {
     nameController.text = userData.user.displayName;
     numberController.text = userData.user.phoneNumber;
 
+    void _next() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => NextSignupScreen(
+            id: userData.user.uid,
+            name: nameController.text,
+            email: userData.user.email,
+            number: numberController.text,
+            imgUrl: userData.user.photoURL,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -48,10 +63,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              // TextField(
-              //   controller: emailController,
-              //   decoration: InputDecoration(labelText: 'Email'),
-              // ),
               SizedBox(height: 20),
               Container(
                 alignment: Alignment.topLeft,
@@ -67,61 +78,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              // RaisedButton(
-              //   onPressed: _presentDatePicker,
-              //   child: Text(_selectedDate == null
-              //       ? 'Selected Date'
-              //       : (DateFormat.yMd().format(_selectedDate)).toString()),
-              // ),
-              // TextField(
-              //   controller: addressController,
-              //   decoration: InputDecoration(labelText: 'Address'),
-              // ),
               Spacer(),
-              Container(
+              CustomButton(
+                function: _next,
+                text: "Next",
                 height: 60,
                 width: 220,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(
-                      color: Colors.orange,
-                    ),
-                  ),
-                  color: Colors.orange,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => NextSignupScreen(
-                          id: userData.user.uid,
-                          name: nameController.text,
-                          email: userData.user.email,
-                          number: numberController.text,
-                          imgUrl: userData.user.photoURL,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
               ),
               Spacer(),
-              // RaisedButton(
-              //   onPressed: () {
-              //     Provider.of<GoogleSignInProvider>(context, listen: false)
-              //         .skipSetup(
-              //       id: userData.user.uid,
-              //       email: userData.user.email,
-              //       name: userData.user.displayName,
-              //       number: userData.user.phoneNumber,
-              //       photoUrl: userData.user.photoURL,
-              //     );
-              //   },
-              //   child: Text('Skip'),
-              // ),
             ],
           ),
         ),
