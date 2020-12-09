@@ -1,5 +1,7 @@
-import './google_signup_button_widget.dart';
 import 'package:flutter/material.dart';
+
+//import './google_signup_button_widget.dart';
+import './custom_button_login.dart';
 
 class SignUpWidget extends StatelessWidget {
   @override
@@ -19,14 +21,27 @@ class SignUpWidget extends StatelessWidget {
             ),
           ),
           Spacer(),
-          GoogleSignupButtonWidget(),
+          Spacer(),
+          Spacer(),
+          CustomButtonLogin(
+            height: 56,
+            width: 279,
+            text: 'Log In',
+          ),
+          //GoogleSignupButtonWidget(),
           SizedBox(
             height: 12,
           ),
-          Text(
-            'Login to continue',
-            style: TextStyle(fontSize: 16),
+          CustomButtonLogin(
+            height: 56,
+            width: 279,
+            isLogin: false,
+            text: 'Sign Up',
           ),
+          // Text(
+          //   'Login to continue',
+          //   style: TextStyle(fontSize: 16),
+          // ),
           Spacer(),
         ],
       );

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/google_sign_in.dart';
 
 class CustomButton extends StatelessWidget {
-
   final Function function;
   final double height;
   final double width;
+  final double fontSize;
   final String text;
 
-  CustomButton({this.function, this.height = 60, this.width = 220, this.text});
+  CustomButton({
+    this.function,
+    this.height = 60,
+    this.width = 220,
+    this.fontSize = 20,
+    this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,7 @@ class CustomButton extends StatelessWidget {
       width: width,
       child: FlatButton(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(11.0),
           side: BorderSide(
             color: Colors.orange,
           ),

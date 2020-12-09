@@ -85,6 +85,7 @@ class UserInfoScreen extends StatelessWidget {
           Container(
             width: 200,
             height: 50,
+            
             child: FlatButton(
               onPressed: () {
                 showDialog(
