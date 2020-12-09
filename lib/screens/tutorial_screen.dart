@@ -1,9 +1,7 @@
-import 'package:FastAid/page/home_page.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/carousel_widget.dart';
 import '../widgets/carousel_cards.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TutorialScreen extends StatefulWidget {
   @override
@@ -44,19 +42,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      final prefs = await SharedPreferences.getInstance();
-
-      if (prefs.containsKey('isShowed')) {
-        setState(() {
-          isShowed = prefs.getBool('isShowed');
-        });
-      }
-    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    return isShowed ? HomePage() : CarouselWidget(_cards);
+    return CarouselWidget(_cards);
   }
 }
