@@ -15,8 +15,9 @@ class CarouselCard extends StatelessWidget {
       padding: EdgeInsets.all(20),
       alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Spacer(),
           Container(
             child: Image.asset(imagePath),
           ),
@@ -40,6 +41,9 @@ class CarouselCard extends StatelessWidget {
             body,
             style: TextStyle(fontSize: 14),
           ), //BODY
+          Spacer(),
+          Spacer(),
+          Spacer(),
         ],
       ),
     );

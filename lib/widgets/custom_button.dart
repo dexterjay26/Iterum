@@ -17,6 +17,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Container(
       height: height,
       width: width,
@@ -24,10 +25,10 @@ class CustomButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(11.0),
           side: BorderSide(
-            color: Colors.orange,
+            color: primaryColor,
           ),
         ),
-        color: Colors.orange,
+        color: primaryColor,
         onPressed: function,
         child: Text(
           text,

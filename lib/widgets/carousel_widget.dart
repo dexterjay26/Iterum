@@ -22,6 +22,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
     //CarouselController buttonCarouselController = CarouselController();
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       body: Stack(
         //fit: StackFit.expand,
@@ -44,7 +45,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                    width: w,
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    width: w * .9,
                     child: i,
                   );
                 },
@@ -52,7 +54,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
             }).toList(),
           ),
           Positioned(
-            bottom: 80,
+            bottom: 150,
             right: 1,
             left: 1,
             child: Container(
@@ -64,41 +66,43 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 children: <Widget>[
                   for (int i = 0; i < widget._cards.length; i++)
                     if (i == _currentPage)
-                      buildSlideDot(true)
+                      buildSlideDot(true, primaryColor)
                     else
-                      buildSlideDot(false)
+                      buildSlideDot(false, primaryColor)
                 ],
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 10),
-            //   child: RaisedButton(
-            //     onPressed: () {},
-            //     child: Text("Skip"),
-            //   ),
-            // ),
           ),
           Positioned(
-            bottom: 50,
+            bottom: 70,
             right: 1,
             left: 1,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(bottom: 10),
-              child: FlatButton(
-                onPressed: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool('isShowed', true);
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (ctx) => HomePage()));
-                },
-                child: Text(
-                  _currentPage == 3 ? "Finish" : "Sklp",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+            child: Column(
+              children: [
+                Container(
+                  height: 56,
+                  width: 279,
+                  child: OutlineButton(
+                    borderSide: BorderSide(color: Color(0xFFFF9F00)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(11.0),
+                      side: BorderSide(
+                        color: Color(0xFFFF9F00),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isShowed', true);
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (ctx) => HomePage()));
+                    },
+                    child: Text(
+                      _currentPage == 3 ? "Finish" : "Skip",
+                      style: TextStyle(color: Color(0xFFFF9F00), fontSize: 26),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
@@ -106,15 +110,14 @@ class _CarouselWidgetState extends State<CarouselWidget> {
     );
   }
 
-  Widget buildSlideDot(bool isActive) {
+  Widget buildSlideDot(bool isActive, Color primaryColor) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      height: isActive ? 12 : 8,
-      width: isActive ? 12 : 8,
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      height: isActive ? 15 : 10,
+      width: isActive ? 15 : 10,
       decoration: BoxDecoration(
-        color:
-            isActive ? Theme.of(context).primaryColor : Colors.orange.shade500,
+        color: isActive ? primaryColor : Color(0xFFFFC928),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );

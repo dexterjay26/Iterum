@@ -1,54 +1,53 @@
 import 'package:flutter/material.dart';
 
-class CustomButtonLogin extends StatelessWidget {
+class CustomButtonSocial extends StatelessWidget {
   final Function function;
   final double height;
   final double width;
   final String text;
   final bool isLogin;
+  final bool isGoogle;
 
-  CustomButtonLogin({
+  CustomButtonSocial({
     this.function,
     this.height = 60,
     this.width = 220,
     this.text,
     this.isLogin = true,
+    this.isGoogle = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-
+    
     return Container(
       height: height,
       width: width,
-      child: isLogin
-          ? RaisedButton(
-              color: Color(0xFFFF9F00),
+      child: isGoogle
+          ? RaisedButton.icon(
+              color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(11.0),
-                side: BorderSide(
-                  color: Color(0xFFFF9F00),
-                ),
               ),
+              icon: new Image.asset('assets/images/google_logo.png',
+                  height: 27, width: 27),
               onPressed: function,
-              child: Text(
-                text,
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
+              label: Text(text, style: TextStyle(fontSize: 18)),
             )
-          : OutlineButton(
-              borderSide: BorderSide(color: primaryColor),
+          : RaisedButton.icon(
+              color: Color(0xFF4867AC),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(11.0),
-                side: BorderSide(
-                  color: primaryColor,
-                ),
               ),
+              icon: new Image.asset('assets/images/facebook_logo.png',
+                  height: 27, width: 27),
               onPressed: function,
-              child: Text(
+              label: Text(
                 text,
-                style: TextStyle(color: primaryColor, fontSize: 24),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
               ),
             ),
     );
